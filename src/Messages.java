@@ -10,6 +10,8 @@ public class Messages {
     public static final String GAME_COMPLETE = "正解！%sの%sだよ";
     public static final String MARK_PHASE_GAME_OVER = "残念！！図柄は%sでした！%n";
     public static final String NUMBER_PHASE_GAME_OVER = "残念！！正解は%sの%sでした！%n";
+    public static final String BIGGER_TIPS = "もっと大きい数だよ";
+    public static final String SMALLER_TIPS = "もっと小さい数だよ";
 
     public static final String ENTER_NUMBER_WARN = "数字を入力してください";
     public static final String NUMBER_MUST_BETWEEN_WARN_FOR_NUMBER = "数字は%dから%dの範囲で指定してください%n";

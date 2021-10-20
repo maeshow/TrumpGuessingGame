@@ -80,6 +80,12 @@ public class App {
                 break;
             }
             showFormattedMessage(Messages.WRONG_ANSWER, TRUMP_NUMBER[number]);
+
+            if (isBigger(CORRECT[NUMBER_INDEX], number)) {
+                showMessageWithNewLine(Messages.BIGGER_TIPS);
+            } else {
+                showMessageWithNewLine(Messages.SMALLER_TIPS);
+            }
             count++;
         }
 
@@ -130,6 +136,10 @@ public class App {
 
     private static boolean isEqual(int a, int b) {
         return a == b;
+    }
+
+    private static boolean isBigger(int a, int b) {
+        return a > b;
     }
 
     private static boolean isTrumpMarkRange(int a) {
