@@ -7,37 +7,23 @@ public class App {
 
     private static final String[] TRUMP_MARK = { "ハート", "ダイヤ", "スペード", "クローバー" };
     private static final String[] TRUMP_NUMBER = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
+    private static final int FIRST_MARK_INDEX = 0;
+    private static final int LAST_MARK_INDEX = TRUMP_MARK.length - 1;
+    private static final int FIRST_NUMBER_INDEX = 0;
+    private static final int LAST_NUMBER_INDEX = TRUMP_NUMBER.length - 1;
 
     private static final int[] CORRECT = new int[2];
+    private static final int MARK_INDEX = 0;
+    private static final int NUMBER_INDEX = 1;
 
     public static void main(String[] args) {
         setCorrectByRandom();
 
         showMessageWithNewLine(Messages.GAME_START);
-        for (String str : Messages.MARK_GUESSING_START) {
-            showMessageWithNewLine(str);
-        }
-
-        while (isResponseLimitRangeForMark()) {
-            int mark = getPlayerInputForTrumpMark();
-            if (isEqual(CORRECT[0], mark)) {
-                showFormattedMessage(Messages.MARK_RIGHT, TRUMP_MARK[mark]);
-                break;
-            }
-            showFormattedMessage(Messages.WRONG_ANSWER, TRUMP_MARK[mark]);
-        }
-
+        showGameMenu();
+        startMarkGuessing();
         showMessageWithNewLine(Messages.NUMBER_GUESSING_START);
-
-        while (isResponseLimitRangeForNumber()) {
-            int number = getPlayerInputForTrumpNumber();
-            if (isEqual(CORRECT[1], number)) {
-                showFormattedMessageForTwoArguments(Messages.GAME_COMPLETE, TRUMP_MARK[CORRECT[0]],
-                        TRUMP_NUMBER[CORRECT[1]]);
-                break;
-            }
-            showFormattedMessage(Messages.WRONG_ANSWER, TRUMP_NUMBER[number]);
-        }
+        startNumberGuessing();
 
         STDIN.close();
     }
@@ -45,8 +31,40 @@ public class App {
     private static void setCorrectByRandom() {
         Random random = new Random();
 
-        CORRECT[0] = random.nextInt(TRUMP_MARK.length);
-        CORRECT[1] = random.nextInt(TRUMP_NUMBER.length);
+        CORRECT[MARK_INDEX] = random.nextInt(TRUMP_MARK.length);
+        CORRECT[NUMBER_INDEX] = random.nextInt(TRUMP_NUMBER.length);
+    }
+
+    private static void showGameMenu() {
+        showMessageWithNewLine(Messages.MARK_GUESSING_START);
+        int count = 0;
+        for (String str : TRUMP_MARK) {
+            showFormattedMessageForTwoArguments(Messages.MARK_INPUT_DEFINE, count, str);
+            count++;
+        }
+    }
+
+    private static void startMarkGuessing() {
+        while (isResponseLimitRangeForMark()) {
+            int mark = getPlayerInputForTrumpMark();
+            if (isEqual(CORRECT[MARK_INDEX], mark)) {
+                showFormattedMessage(Messages.MARK_RIGHT, TRUMP_MARK[mark]);
+                break;
+            }
+            showFormattedMessage(Messages.WRONG_ANSWER, TRUMP_MARK[mark]);
+        }
+    }
+
+    private static void startNumberGuessing() {
+        while (isResponseLimitRangeForNumber()) {
+            int number = getPlayerInputForTrumpNumber();
+            if (isEqual(CORRECT[NUMBER_INDEX], number)) {
+                showFormattedMessageForTwoArguments(Messages.GAME_COMPLETE, TRUMP_MARK[CORRECT[MARK_INDEX]],
+                        TRUMP_NUMBER[CORRECT[NUMBER_INDEX]]);
+                break;
+            }
+            showFormattedMessage(Messages.WRONG_ANSWER, TRUMP_NUMBER[number]);
+        }
     }
 
     private static int getPlayerInputForTrumpMark() {
@@ -64,11 +82,11 @@ public class App {
 
         if (isTrumpMarkRange(inputNumber)) {
             return inputNumber;
-        } else {
-            showMessageWithNewLine(Messages.NUMBER_MUST_BETWEEN_0_TO_3_WARN);
-            showNewLine();
-            return getPlayerInputForTrumpMark();
         }
+        showFormattedMessageForTwoArguments(Messages.NUMBER_MUST_BETWEEN_WARN_FOR_NUMBER, FIRST_MARK_INDEX,
+                LAST_MARK_INDEX);
+        showNewLine();
+        return getPlayerInputForTrumpMark();
     }
 
     private static int getPlayerInputForTrumpNumber() {
@@ -77,11 +95,11 @@ public class App {
 
         if (isTrumpNumber(input)) {
             return Arrays.asList(TRUMP_NUMBER).indexOf(input);
-        } else {
-            showMessageWithNewLine(Messages.NUMBER_MUST_BETWEEN_0_TO_K_WARN);
-            showNewLine();
-            return getPlayerInputForTrumpNumber();
         }
+        showFormattedMessageForTwoArguments(Messages.NUMBER_MUST_BETWEEN_WARN_FOR_STRING,
+                TRUMP_NUMBER[FIRST_NUMBER_INDEX], TRUMP_NUMBER[LAST_NUMBER_INDEX]);
+        showNewLine();
+        return getPlayerInputForTrumpNumber();
     }
 
     private static boolean isResponseLimitRangeForMark() {
@@ -121,6 +139,14 @@ public class App {
     }
 
     private static void showFormattedMessageForTwoArguments(String message, String a, String b) {
+        System.out.format(message, a, b);
+    }
+
+    private static void showFormattedMessageForTwoArguments(String message, int a, String b) {
+        System.out.format(message, a, b);
+    }
+
+    private static void showFormattedMessageForTwoArguments(String message, int a, int b) {
         System.out.format(message, a, b);
     }
 }
